@@ -20,3 +20,5 @@ Retrieval-augmented extractive question answering pipeline. A summarization step
 
 
 ## How to run
+## Team
+Roberto Herrera, Bach Nguyen
