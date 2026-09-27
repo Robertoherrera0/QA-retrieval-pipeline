@@ -12,8 +12,6 @@ WORKDIR /
 
 COPY requirements-text.txt .
 
-RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
-
 # Install Jupyter and dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements-text.txt && \
