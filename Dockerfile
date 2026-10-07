@@ -20,7 +20,7 @@ RUN pip install --upgrade pip && \
 COPY README.md .
 COPY load_models.ipynb .
 COPY load_dataset.ipynb .
-
+COPY qa_pipeline.ipynb .
 
 # Expose Jupyter port
 EXPOSE 8888
