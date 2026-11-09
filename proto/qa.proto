@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package qa;
+
+message Paragraph {
+  string title = 1;
+  string text = 2;
+}
+
+message Chunk {
+  int32 rank = 1;
+  string text = 2;
+  int32 para_id = 3;
+  int32 start_index = 4;
+  int32 end_index = 5;
+  float distance = 6;
+  int32 hop = 7;
+}
+
+message StageTimings {
+  double queue_s = 1;
+  double inference_s = 2;
+  double total_s = 3;
+}
+
+message RetrieveRequest {
+  string request_id = 1;
+  string question = 2;
+  repeated Paragraph paragraphs = 3;
+}
+
+message RetrieveResponse {
+  string request_id = 1;
+  repeated Chunk chunks = 2;
+  string variant = 3;
+  int32 batch_size = 4;
+  double chunking_s = 5;
+  double embedding_store_s = 6;
+  double retrieval_s = 7;
+  StageTimings timings = 8;
+  string error = 9;
+}
+
+message AnswerRequest {
+  string request_id = 1;
+  string question = 2;
+  repeated Chunk chunks = 3;
+}
+
+message AnswerResponse {
+  string request_id = 1;
+  string answer = 2;
+  float score = 3;
+  int32 input_tokens = 4;
+  int32 chunks_in_window = 5;
+  string variant = 6;
+  int32 batch_size = 7;
+  bool a1_non_empty = 8;
+  bool a2_short = 9;
+  bool a3_answer_type = 10;
+  bool a4_confident = 11;
+  bool passed = 12;
+  double packing_s = 13;
+  StageTimings timings = 14;
+  string error = 15;
+}
+
+service Retriever {
+  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);
+}
+
+service QAModel {
+  rpc Answer(AnswerRequest) returns (AnswerResponse);
+}
