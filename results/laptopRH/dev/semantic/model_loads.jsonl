@@ -1,0 +1,4 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 2.3021129640001163, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 4264.72265625}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.798674120999749}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 4535.53125}

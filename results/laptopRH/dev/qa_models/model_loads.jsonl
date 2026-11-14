@@ -1,0 +1,6 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 3.486348664999241, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 3208.25}
+{"stage": "qa", "model": "deepset/roberta-base-squad2", "load_s": 1.4573739809966355}
+{"stage": "qa_done", "model": "deepset/roberta-base-squad2", "peak_rss_mb": 3658.0}
+{"stage": "qa", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "load_s": 10.25016407700241}
+{"stage": "qa_done", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "peak_rss_mb": 4731.9296875}

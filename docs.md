@@ -1,13 +1,13 @@
 ## Run the notebooks
 
-From the cloned repository folder, build the image:
+From the cloned repository folder, build the image.
 
 ```bash
-docker build -t qa-retrieval-pipeline .
+docker build -t qa-pipeline .
 ```
 
-Start the container with the project folder mounted at `/notebooks` and a persistent download cache.
+Start the container with the project folder mounted at `/work` and the results folder mounted at `/app/results`.
 
 ```bash
-docker run --name qa -p 8888:8888 -v "/$(pwd):/notebooks" -v qa_cache:/root/.cache qa-retrieval-pipeline
+docker run -p 8888:8888 -v "$(pwd)/results:/app/results" -v "$(pwd):/work" qa-pipeline
 ```

@@ -1,0 +1,2 @@
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.6069461739998587}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 3502.16015625}

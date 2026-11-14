@@ -25,7 +25,7 @@ Everything is in `qa_pipeline.ipynb`.
 
 Open the notebook in Jupyter and run all cells. The last cell runs all 57 settings per dataset and saves each run in `results/`. By default it uses a small sample of questions and takes about 15 minutes. To reproduce the numbers in the report on all 157 questions, set `QUICK = False` in that cell. This takes about 2 hours on a CPU laptop.
 
-The reported results are in `results/laptopRH/final_results/combined_summary.csv`. The report is in `Project-Milestone-1.pdf`.
+The reported results are in `results/laptopRH/final_results/combined_summary.csv`.
 ## Team
 
 Roberto Herrera, Bach Nguyen
