@@ -1,0 +1,4 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.18312123400392, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7826.35546875}
+{"stage": "qa", "model": "distilbert/distilbert-base-cased-distilled-squad", "load_s": 0.1573801260019536}
+{"stage": "qa_done", "model": "distilbert/distilbert-base-cased-distilled-squad", "peak_rss_mb": 7826.35546875}

@@ -1,0 +1,8 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0483135590002348, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 6848.3046875}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.3800547959999676}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 6848.3046875}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0855394620011793, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.2287480399972992}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}

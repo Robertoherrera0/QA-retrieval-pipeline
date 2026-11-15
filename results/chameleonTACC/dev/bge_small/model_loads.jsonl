@@ -1,0 +1,6 @@
+{"stage": "embedding", "model": "BAAI/bge-small-en-v1.5", "load_s": 5.268119528998795, "token_limit": 512}
+{"stage": "embedding", "model": "BAAI/bge-small-en-v1.5", "load_s": 1.1061938389975694, "token_limit": 512}
+{"stage": "embedding", "model": "BAAI/bge-small-en-v1.5", "load_s": 1.1462860429965076, "token_limit": 512}
+{"stage": "embedding_done", "model": "BAAI/bge-small-en-v1.5", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.2314943290039082}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}

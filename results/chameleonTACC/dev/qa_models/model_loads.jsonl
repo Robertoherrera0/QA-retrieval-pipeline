@@ -1,0 +1,15 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0646683649974875, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "deepset/roberta-base-squad2", "load_s": 0.2664500489991042}
+{"stage": "qa_done", "model": "deepset/roberta-base-squad2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "load_s": 0.24819906100310618}
+{"stage": "qa_done", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "distilbert/distilbert-base-cased-distilled-squad", "load_s": 0.2999991569959093}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.15285802300059, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/roberta-base-squad2", "load_s": 0.26899578599841334}
+{"stage": "qa_done", "model": "deepset/roberta-base-squad2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "load_s": 0.2503494310003589}
+{"stage": "qa_done", "model": "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "distilbert/distilbert-base-cased-distilled-squad", "load_s": 0.15252565199625678}
+{"stage": "qa_done", "model": "distilbert/distilbert-base-cased-distilled-squad", "peak_rss_mb": 7642.28125}

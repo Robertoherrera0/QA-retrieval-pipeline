@@ -1,0 +1,24 @@
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 2.3021129640001163, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 4264.72265625}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.798674120999749}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 4535.53125}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0821579350013053, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.24681392200000118}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 6885.3125}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0640332300026785, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.26445246799994493}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 6885.3125}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0440312749997247, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.22519442899647402}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0517781540038413, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.2489953449985478}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}
+{"stage": "embedding", "model": "sentence-transformers/all-MiniLM-L6-v2", "load_s": 1.0548686629990698, "token_limit": 256}
+{"stage": "embedding_done", "model": "sentence-transformers/all-MiniLM-L6-v2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.22751083199545974}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}

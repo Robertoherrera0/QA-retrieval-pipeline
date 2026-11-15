@@ -1,0 +1,9 @@
+{
+  "label": "laptopRH",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "logical_processors": 12,
+  "device": "cpu",
+  "torch": "2.14.1+cu130",
+  "gpu": null
+}

@@ -1,0 +1,9 @@
+stage,name,version,source,size_on_disk_mb,test_f1_single_pass,test_f1_two_hop
+embedding,all-MiniLM-L6-v2,1110a243fdf4706b3f48f1d95db1a4f5529b4d41,https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2,91.6,0.423,0.46
+embedding,all-MiniLM-L12-v2,a50ef00143b4d5391434df20ae11632588ac25be,https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2,134.2,0.423,0.469
+embedding,all-mpnet-base-v2,e8c3b32edf5434bc2275fc9bab85f82640a19130,https://huggingface.co/sentence-transformers/all-mpnet-base-v2,438.7,0.446,0.49
+embedding,bge-small-en-v1.5,5c38ec7c405ec4b44b94cc5a9bb96e735b38267a,https://huggingface.co/BAAI/bge-small-en-v1.5,134.5,0.514,0.533
+qa,tinyroberta-squad2,12b287c9df677e28b07f0a023850dba68c997dbf,https://huggingface.co/deepset/tinyroberta-squad2,328.8,0.423,0.46
+qa,roberta-base-squad2,adc3b06f79f797d1c575d5479d6f5efe54a9e3b4,https://huggingface.co/deepset/roberta-base-squad2,497.6,0.472,0.503
+qa,bert-large-uncased-whole-word-masking-finetuned-squad,979de3ccf2f366b17c326254262eff51aec29d62,https://huggingface.co/google-bert/bert-large-uncased-whole-word-masking-finetuned-squad,1341.3,0.571,0.588
+qa,distilbert-base-cased-distilled-squad,564e9b582944a57a3e586bbb98fd6f0a4118db7f,https://huggingface.co/distilbert/distilbert-base-cased-distilled-squad,261.4,0.395,0.435

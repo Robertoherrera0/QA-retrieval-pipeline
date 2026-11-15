@@ -1,0 +1,9 @@
+{
+  "label": "chameleonTACC",
+  "platform": "Linux-5.15.0-185-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "logical_processors": 48,
+  "device": "cpu",
+  "torch": "2.14.1+cu130",
+  "gpu": null
+}

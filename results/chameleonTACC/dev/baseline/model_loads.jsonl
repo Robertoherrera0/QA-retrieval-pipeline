@@ -1,0 +1,11 @@
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.37221839099993304}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.46090455900412053}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.25126589000137756}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 6885.3125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.21849966800073162}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.2541411589991185}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}
+{"stage": "qa", "model": "deepset/tinyroberta-squad2", "load_s": 0.23734024100122042}
+{"stage": "qa_done", "model": "deepset/tinyroberta-squad2", "peak_rss_mb": 7642.28125}

@@ -1,0 +1,6 @@
+{
+  "deepset/roberta-base-squad2": 0.15,
+  "deepset/tinyroberta-squad2": 0.1,
+  "distilbert/distilbert-base-cased-distilled-squad": 0.55,
+  "google-bert/bert-large-uncased-whole-word-masking-finetuned-squad": 0.55
+}
