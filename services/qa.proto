@@ -34,6 +34,8 @@ message RetrieveReply {
   double indexing_s = 4;
   double retrieval_s = 5;
   int32 batch_size = 6;
+  double queue_s = 7;
+  double service_s = 8;
 }
 
 message AnswerRequest {
@@ -49,6 +51,8 @@ message AnswerReply {
   double packing_s = 4;
   double qa_s = 5;
   int32 batch_size = 6;
+  double queue_s = 7;
+  double service_s = 8;
 }
 
 service Embedding {

@@ -133,10 +133,13 @@ class Batcher:
                 results = self.run_batch([item for item, _, _ in batch])
             except Exception as error:
                 results = [error] * len(batch)
-            for (_, future, _), result in zip(batch, results):
+            finished = perf_counter()
+            for (_, future, arrived), result in zip(batch, results):
                 if isinstance(result, Exception):
                     future.set_exception(result)
                 else:
+                    result.queue_s = started - arrived
+                    result.service_s = finished - started
                     future.set_result(result)
 
 
