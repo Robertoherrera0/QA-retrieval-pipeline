@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embed
+  namespace: qa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: embed
+  template:
+    metadata:
+      labels:
+        app: embed
+    spec:
+      containers:
+        - name: embed
+          image: qa-embed:latest
+          imagePullPolicy: Never
+          ports:
+            - name: grpc
+              containerPort: 50051
+            - name: metrics
+              containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: qa-config
+          env:
+            - name: EMBEDDER
+              value: all-MiniLM-L6-v2
+            - name: CHUNK_SIZE
+              value: "128"
+            - name: BATCH_SIZE
+              value: "4"
+            - name: BATCH_TIMEOUT_MS
+              value: "10"
+            - name: NUM_THREADS
+              value: "1"
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "1"
+              memory: 6Gi
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 120
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: embed
+  namespace: qa
+  labels:
+    app: embed
+spec:
+  clusterIP: None
+  selector:
+    app: embed
+  ports:
+    - name: grpc
+      port: 50051
+    - name: metrics
+      port: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qa
+  namespace: qa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qa
+  template:
+    metadata:
+      labels:
+        app: qa
+    spec:
+      containers:
+        - name: qa
+          image: qa-qa:latest
+          imagePullPolicy: Never
+          ports:
+            - name: grpc
+              containerPort: 50051
+            - name: metrics
+              containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: qa-config
+          env:
+            - name: QA_MODEL
+              value: tinyroberta-squad2
+            - name: BATCH_SIZE
+              value: "4"
+            - name: BATCH_TIMEOUT_MS
+              value: "10"
+            - name: NUM_THREADS
+              value: "1"
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "1"
+              memory: 6Gi
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 120
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qa
+  namespace: qa
+  labels:
+    app: qa
+spec:
+  clusterIP: None
+  selector:
+    app: qa
+  ports:
+    - name: grpc
+      port: 50051
+    - name: metrics
+      port: 8000

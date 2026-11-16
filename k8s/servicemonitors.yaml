@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: embed
+  namespace: qa
+spec:
+  selector:
+    matchLabels:
+      app: embed
+  endpoints:
+    - port: metrics
+      interval: 5s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: qa
+  namespace: qa
+spec:
+  selector:
+    matchLabels:
+      app: qa
+  endpoints:
+    - port: metrics
+      interval: 5s
