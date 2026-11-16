@@ -1,3 +1,4 @@
+import json
 import os
 import queue
 import threading
@@ -26,6 +27,10 @@ BATCH = Histogram(
     "batch_size", "Requests per batch", ["stage"], buckets=(1, 2, 4, 8, 16, 32),
 )
 QUEUE_DEPTH = Gauge("queue_depth", "Requests waiting", ["stage"])
+CURRENT_BATCH = Gauge("current_batch_size", "Size of the latest batch", ["stage"])
+ASSERTIONS = Counter(
+    "assertions_total", "Assertion checks on answers", ["stage", "assertion", "result"]
+)
 LOAD = Gauge("model_load_seconds", "Seconds to fetch and load the model", ["stage"])
 
 
@@ -36,13 +41,26 @@ def set_threads():
         torch.set_num_threads(int(threads))
 
 
-def fetch_model(stage, name):
-    client = Minio(
+def registry_client():
+    return Minio(
         os.environ["MINIO_ENDPOINT"],
         access_key=os.environ.get("MINIO_USER", "qa_registry"),
         secret_key=os.environ.get("MINIO_PASSWORD", "qa_registry_pass"),
         secure=False,
     )
+
+
+def fetch_threshold(name):
+    response = registry_client().get_object(BUCKET, "thresholds.json")
+    thresholds = json.loads(response.read())
+    keys = [key for key in thresholds if key.split("/")[-1] == name]
+    if len(keys) != 1:
+        raise RuntimeError(f"thresholds.json has no single entry for {name}")
+    return thresholds[keys[0]]
+
+
+def fetch_model(stage, name):
+    client = registry_client()
     started = perf_counter()
     objects = list(client.list_objects(BUCKET, prefix=f"{stage}/{name}/", recursive=True))
     versions = sorted({o.object_name.split("/")[2] for o in objects})
@@ -109,6 +127,7 @@ class Batcher:
             for _, _, arrived in batch:
                 QUEUE_WAIT.labels(self.stage).observe(started - arrived)
             BATCH.labels(self.stage).observe(len(batch))
+            CURRENT_BATCH.labels(self.stage).set(len(batch))
 
             try:
                 results = self.run_batch([item for item, _, _ in batch])
