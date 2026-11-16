@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package qa;
+
+message Paragraph {
+  string title = 1;
+  int32 para_id = 2;
+  string text = 3;
+}
+
+message Chunk {
+  int32 rank = 1;
+  string text = 2;
+  int32 para_id = 3;
+  string title = 4;
+  int32 start_index = 5;
+  int32 end_index = 6;
+  string chunk_id = 7;
+  double distance = 8;
+  int32 hop = 9;
+}
+
+message RetrieveRequest {
+  string question = 1;
+  repeated Paragraph paragraphs = 2;
+  int32 k = 3;
+  string search = 4;
+}
+
+message RetrieveReply {
+  repeated Chunk chunks = 1;
+  double chunking_s = 2;
+  double embedding_s = 3;
+  double indexing_s = 4;
+  double retrieval_s = 5;
+  int32 batch_size = 6;
+}
+
+message AnswerRequest {
+  string question = 1;
+  repeated Chunk chunks = 2;
+  bool allow_empty = 3;
+}
+
+message AnswerReply {
+  string answer = 1;
+  double score = 2;
+  int32 input_tokens = 3;
+  double packing_s = 4;
+  double qa_s = 5;
+  int32 batch_size = 6;
+}
+
+service Embedding {
+  rpc Retrieve(RetrieveRequest) returns (RetrieveReply);
+}
+
+service QA {
+  rpc Answer(AnswerRequest) returns (AnswerReply);
+}

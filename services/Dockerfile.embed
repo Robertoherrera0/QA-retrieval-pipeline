@@ -1,0 +1,10 @@
+FROM python:3.11-slim
+WORKDIR /app
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --no-cache-dir grpcio grpcio-tools prometheus-client minio \
+    transformers sentence-transformers langchain-core langchain-text-splitters \
+    langchain-chroma langchain-huggingface chromadb
+COPY qa.proto common.py core.py embed_server.py client.py ./
+RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. qa.proto
+EXPOSE 50051 8000
+CMD ["python", "embed_server.py"]
