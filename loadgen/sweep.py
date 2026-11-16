@@ -122,13 +122,23 @@ for stage, spec in STAGES.items():
                 key = (stage, variant, replicas, cores, batch)
                 if key in done:
                     continue
-                configure(stage, replicas, cores, **stage_env(stage, variant, batch))
                 if stage in last_max:
                     guess = max(0.5, last_max[stage] * cost / last_cost[stage])
                 else:
                     guess = max(0.5, t0 * cost)
                 tag = f"{stage}_{variant}_{replicas}x{cores}_b{batch}"
-                max_rps, best, probes = find_max(tag, guess)
+                result = None
+                for attempt in range(3):
+                    try:
+                        configure(stage, replicas, cores, **stage_env(stage, variant, batch))
+                        result = find_max(tag, guess)
+                        break
+                    except Exception as error:
+                        print("failed", tag, attempt, repr(error), flush=True)
+                        time.sleep(60)
+                if result is None:
+                    continue
+                max_rps, best, probes = result
                 if max_rps > 0:
                     last_max[stage], last_cost[stage] = max_rps, cost
                 row = {
