@@ -2,7 +2,8 @@ FROM python:3.11-slim
 WORKDIR /app
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir grpcio grpcio-tools prometheus-client minio \
-    transformers langchain-text-splitters
+    numpy==2.2.6 transformers==4.47.0 tokenizers==0.21.4 \
+    langchain-core==0.3.86 langchain-text-splitters==0.3.11
 COPY qa.proto common.py core.py qa_server.py ./
 RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. qa.proto
 EXPOSE 50051 8000
