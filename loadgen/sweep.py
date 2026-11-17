@@ -23,7 +23,7 @@ QA_MODELS = [
 RESOURCES = [(1, 1), (1, 2), (2, 2), (4, 2)]
 BATCHES = [1, 4, 8]
 OTHER_REPLICAS = 6
-OTHER_CORES = 4
+OTHER_CORES = 2
 
 while not SLA.exists():
     time.sleep(30)
