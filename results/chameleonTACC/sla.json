@@ -1,0 +1,77 @@
+{
+  "reference": {
+    "embedder": "all-MiniLM-L6-v2",
+    "qa_model": "tinyroberta-squad2",
+    "k": 5,
+    "search": "single_pass",
+    "chunk_size": 128,
+    "batch": 1,
+    "replicas": 1,
+    "cores_per_stage": 1
+  },
+  "L0_ms": 3939.511897682678,
+  "SLO_ms": 7879.023795365356,
+  "T0_rps": 2.0,
+  "multiplier": 4,
+  "target_rps": 8.0,
+  "seed": 8001,
+  "pool_sha256": "56752a62587204464f44064728c50d6c928b54614b01dd9e28287b5c6ddee49c",
+  "probes": [
+    {
+      "tag": "low",
+      "rate": 1.0,
+      "p95_ms": 3939.511897682678,
+      "failed": 0,
+      "sent": 101,
+      "achieved_rps": 1.063157894736842
+    },
+    {
+      "tag": "ramp_2",
+      "rate": 2.0,
+      "p95_ms": 7154.904009934398,
+      "failed": 0,
+      "sent": 91,
+      "achieved_rps": 2.022222222222222
+    },
+    {
+      "tag": "ramp_4",
+      "rate": 4.0,
+      "p95_ms": 30000.0,
+      "failed": 56,
+      "sent": 154,
+      "achieved_rps": 2.8
+    },
+    {
+      "tag": "bisect_0_3.00",
+      "rate": 3.0,
+      "p95_ms": 22916.370986531547,
+      "failed": 0,
+      "sent": 106,
+      "achieved_rps": 3.0285714285714285
+    },
+    {
+      "tag": "bisect_1_2.50",
+      "rate": 2.5,
+      "p95_ms": 11370.478942856425,
+      "failed": 0,
+      "sent": 89,
+      "achieved_rps": 2.5428571428571427
+    },
+    {
+      "tag": "bisect_2_2.25",
+      "rate": 2.25,
+      "p95_ms": 8080.819896640605,
+      "failed": 0,
+      "sent": 91,
+      "achieved_rps": 2.275
+    },
+    {
+      "tag": "bisect_3_2.12",
+      "rate": 2.125,
+      "p95_ms": 8690.55882367247,
+      "failed": 0,
+      "sent": 94,
+      "achieved_rps": 2.186046511627907
+    }
+  ]
+}

@@ -5,7 +5,25 @@ import grpc
 
 import qa_pb2
 import qa_pb2_grpc
-from loadgen import score
+import re
+import string
+from collections import Counter
+
+
+def normalize_answer(text):
+    text = text.lower().translate(str.maketrans("", "", string.punctuation))
+    text = re.sub(r"\b(a|an|the)\b", " ", text)
+    return " ".join(text.split())
+
+
+def score(prediction, reference):
+    p = normalize_answer(prediction).split()
+    g = normalize_answer(reference).split()
+    if not p or not g:
+        f1 = float(p == g)
+    else:
+        f1 = 2 * sum((Counter(p) & Counter(g)).values()) / (len(p) + len(g))
+    return float(p == g), f1
 
 p = argparse.ArgumentParser()
 p.add_argument("--embed", required=True)
