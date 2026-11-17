@@ -47,15 +47,17 @@ def build_cache(k, search, count=2000):
     )
 
 
-def probe(tag, rate, duration, offset, k, search, slo_ms=None, warmup=5, cached=False):
+def probe(tag, rate, duration, offset, k, search, slo_ms=None, warmup=5, cached=False,
+          pool_name="loadpool.jsonl", cache_name=None):
     out_dir = RESULTS / "loadruns"
     out_dir.mkdir(parents=True, exist_ok=True)
-    upstream = ["--cache", f"/data/{CACHE.name}"] if cached else ["--embed", target("embed")]
+    cache_file = cache_name or (CACHE.name if cached else None)
+    upstream = ["--cache", f"/data/{cache_file}"] if cache_file else ["--embed", target("embed")]
     command = [
         "docker", "run", "--rm", "--network", "host", "-v", f"{RESULTS}:/data",
         "qa-loadgen", "python", "loadgen.py",
         *upstream, "--qa", target("qa"),
-        "--pool", "/data/loadpool.jsonl", "--rate", str(rate),
+        "--pool", f"/data/{pool_name}", "--rate", str(rate),
         "--duration", str(duration), "--warmup", str(warmup),
         "--offset", str(offset), "--k", str(k), "--search", search,
         "--out", f"/data/loadruns/{tag}.json",

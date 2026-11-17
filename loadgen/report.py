@@ -166,6 +166,94 @@ def scatter(table, xkey, xlabel, filename, log=False):
     plt.close(fig)
 
 
+def read_lines(path):
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+
+
+def pareto_front(points):
+    front = []
+    best = -1.0
+    for point in sorted(points, key=lambda p: (p["cost"], -p["f1"])):
+        if point["f1"] > best:
+            front.append(point)
+            best = point["f1"]
+    return front
+
+
+def t7():
+    rows = read_lines(RESULTS / "e2e.jsonl")
+    accuracy = {(r["embedder"], r["qa_model"]): r for r in rows if r["part"] == "accuracy"}
+    configs = []
+    for r in rows:
+        if r["part"] != "load":
+            continue
+        a = accuracy.get((r["embedder"], r["qa_model"]))
+        configs.append({
+            "embedder": r["embedder"], "qa_model": r["qa_model"],
+            "embed": f"{r['embed_replicas']}x{r['embed_cores']}",
+            "qa": f"{r['qa_replicas']}x{r['qa_cores']}",
+            "cost": r["cost"], "core_seconds": r["core_seconds"],
+            "f1": a["f1"] if a else None, "em": a["em"] if a else None,
+            "p50_ms": r["p50_ms"], "p95_ms": r["p95_ms"], "p99_ms": r["p99_ms"],
+            "slo_attainment": r["slo_attainment"], "meets_sla": r["meets_sla"],
+            "target_reachable_in_profile": r["profile_says_target_reachable"],
+        })
+    if not configs:
+        return
+    with (OUT / "t7_end_to_end.csv").open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(configs[0].keys()))
+        writer.writeheader()
+        writer.writerows(configs)
+    heads = ["Embedder", "QA model", "Embed replicas x cores", "QA replicas x cores", "Cost",
+             "Core seconds", "F1", "EM", "p50 ms", "p95 ms", "p99 ms", "SLO attainment", "Meets SLA"]
+    lines = ["| " + " | ".join(heads) + " |", "|" + "---|" * len(heads)]
+    for c in configs:
+        attainment = "" if c["slo_attainment"] is None else f"{100 * c['slo_attainment']:.1f}%"
+        lines.append("| " + " | ".join([
+            c["embedder"], c["qa_model"], c["embed"], c["qa"], str(c["cost"]),
+            fmt(c["core_seconds"]), fmt(c["f1"], 3), fmt(c["em"], 3), fmt(c["p50_ms"]),
+            fmt(c["p95_ms"]), fmt(c["p99_ms"]), attainment, "yes" if c["meets_sla"] else "no",
+        ]) + " |")
+    (OUT / "t7_end_to_end.md").write_text("\n".join(lines) + "\n")
+
+    scored = [c for c in configs if c["f1"] is not None]
+    fig, ax = plt.subplots(figsize=(9, 6), dpi=150)
+    for c in scored:
+        ax.scatter(c["cost"], c["f1"], s=70, marker="o" if c["meets_sla"] else "x",
+                   color="C2" if c["meets_sla"] else "C3")
+    front = pareto_front(scored)
+    ax.step([c["cost"] for c in front], [c["f1"] for c in front], where="post",
+            color="black", linewidth=1.2)
+    for c in front:
+        ax.annotate(f"{c['embedder']} + {c['qa_model'].split('-')[0]}", (c["cost"], c["f1"]),
+                    textcoords="offset points", xytext=(5, 5), fontsize=7)
+    ax.scatter([], [], marker="o", color="C2", label="meets the SLA")
+    ax.scatter([], [], marker="x", color="C3", label="misses the SLA")
+    ax.plot([], [], color="black", label="Pareto front")
+    ax.set_xlabel("Cost (replicas x cores per replica, both stages)")
+    ax.set_ylabel("Test slice F1")
+    ax.grid(alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(OUT / "pareto_cost_accuracy.png", facecolor="white")
+    plt.close(fig)
+
+    gold = read_lines(RESULTS / "gold.jsonl")
+    if gold:
+        sla = json.loads((RESULTS / "sla.json").read_text())
+        reference = sla["reference"]["embedder"]
+        out = ["| QA model | F1 on gold paragraphs | F1 in the full pipeline | Gap |", "|---|---|---|---|"]
+        for g in gold:
+            full = accuracy.get((reference, g["qa_model"]))
+            full_f1 = full["f1"] if full else None
+            gap = None if full_f1 is None else g["f1"] - full_f1
+            out.append(f"| {g['qa_model']} | {fmt(g['f1'], 3)} | {fmt(full_f1, 3)} | {fmt(gap, 3)} |")
+        (OUT / "gold_ablation.md").write_text("\n".join(out) + "\n")
+    print(len(configs), "end to end rows written to", OUT)
+
+
 def main():
     rows = load_rows()
     accuracy = accuracy_by_variant()
@@ -178,6 +266,7 @@ def main():
     (OUT / "accuracy.json").write_text(json.dumps(
         {f"{k[0]}/{k[1]}": v for k, v in accuracy.items()}, indent=2))
     print(len(table), "rows written to", OUT)
+    t7()
 
 
 main()

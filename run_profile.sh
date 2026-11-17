@@ -1,7 +1,8 @@
 #!/bin/bash
-# usage run_profile.sh [report|full]
+# usage run_profile.sh [report|t7|full]
 #   report  builds every table and plot from the saved results (default, takes seconds)
-#   full    deploys, calibrates the SLA, runs the whole profiling sweep, then builds the report
+#   t7      runs the end to end configurations and the gold input ablation, then builds the report
+#   full    deploys, calibrates the SLA, runs the whole profiling sweep, runs t7, then builds the report
 set -e
 cd "$(dirname "$0")"
 
@@ -23,8 +24,18 @@ report() {
     fi
 }
 
+end_to_end() {
+    python3 loadgen/e2e.py accuracy
+    python3 loadgen/e2e.py load
+    python3 loadgen/e2e.py gold
+}
+
 case "$mode" in
     report)
+        report
+        ;;
+    t7)
+        end_to_end
         report
         ;;
     full)
@@ -32,10 +43,11 @@ case "$mode" in
         python3 loadgen/calibrate.py --embedder "$EMBEDDER" --qa-model "$QA_MODEL" \
             --k "$K" --search "$SEARCH"
         python3 loadgen/sweep.py
+        end_to_end
         report
         ;;
     *)
-        echo "usage run_profile.sh [report|full]"
+        echo "usage run_profile.sh [report|t7|full]"
         exit 1
         ;;
 esac
