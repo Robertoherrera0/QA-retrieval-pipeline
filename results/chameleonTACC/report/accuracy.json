@@ -1,0 +1,42 @@
+{
+  "embed/all-MiniLM-L12-v2": {
+    "f1": 0.42925454640522814,
+    "em": 0.35185185185185186,
+    "questions": 108
+  },
+  "embed/all-MiniLM-L6-v2": {
+    "f1": 0.44943266027043377,
+    "em": 0.37037037037037035,
+    "questions": 108
+  },
+  "embed/all-mpnet-base-v2": {
+    "f1": 0.43787355861339067,
+    "em": 0.37037037037037035,
+    "questions": 108
+  },
+  "embed/bge-small-en-v1.5": {
+    "f1": 0.5418503778804036,
+    "em": 0.4722222222222222,
+    "questions": 108
+  },
+  "qa/bert-large-uncased-whole-word-masking-finetuned-squad": {
+    "f1": 0.5354173424412306,
+    "em": 0.48514851485148514,
+    "questions": 101
+  },
+  "qa/distilbert-base-cased-distilled-squad": {
+    "f1": 0.4467668456014605,
+    "em": 0.36633663366336633,
+    "questions": 101
+  },
+  "qa/roberta-base-squad2": {
+    "f1": 0.46800406480620466,
+    "em": 0.4158415841584158,
+    "questions": 101
+  },
+  "qa/tinyroberta-squad2": {
+    "f1": 0.4352019205532031,
+    "em": 0.36633663366336633,
+    "questions": 101
+  }
+}

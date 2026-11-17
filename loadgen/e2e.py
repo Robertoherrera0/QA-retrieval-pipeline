@@ -24,7 +24,7 @@ GOLD_OUT = RESULTS / "gold.jsonl"
 BIG = (6, 3)
 
 p = argparse.ArgumentParser()
-p.add_argument("part", choices=["accuracy", "load", "gold"])
+p.add_argument("part", choices=["accuracy", "load", "loadbig", "gold"])
 p.add_argument("--rate", type=float, default=3.0, help="requests per second for accuracy and gold runs")
 p.add_argument("--load-seconds", type=int, default=120)
 p.add_argument("--questions", type=int, default=1000)
@@ -135,6 +135,35 @@ def load_part():
             time.sleep(10)
 
 
+def load_big_part():
+    rows = [r for r in read_rows(E2E_OUT) if r.get("part") == "load"]
+    scaled = {(r["embedder"], r["qa_model"]) for r in rows if r.get("scaled")}
+    for old in rows:
+        embedder, qa_model = old["embedder"], old["qa_model"]
+        if old.get("scaled") or old["profile_says_target_reachable"] or (embedder, qa_model) in scaled:
+            continue
+        (er, ec), (qr, qc) = BIG, BIG
+        configure("embed", er, ec, **embed_env(embedder))
+        configure("qa", qr, qc, **qa_env(qa_model))
+        tag = f"e2e_loadbig_{embedder}_{qa_model}"
+        result = probe(tag, target, args.load_seconds, 0, k, search, slo)
+        cost = er * ec + qr * qc
+        row = {
+            "part": "load", "scaled": True, "embedder": embedder, "qa_model": qa_model,
+            "embed_replicas": er, "embed_cores": ec, "qa_replicas": qr, "qa_cores": qc,
+            "cost": cost, "core_seconds": cost * args.load_seconds,
+            "rate": target, "duration": args.load_seconds, "slo_ms": slo,
+            "p50_ms": result["p50_ms"], "p95_ms": result["p95_ms"], "p99_ms": result["p99_ms"],
+            "slo_attainment": result["slo_attainment"], "failed": result["failed"],
+            "sent": result["sent"], "achieved_rps": result["achieved_rps"],
+            "meets_sla": result["p95_ms"] <= slo and result["failed"] <= 0.01 * result["sent"],
+            "profile_says_target_reachable": False,
+        }
+        append(E2E_OUT, row)
+        print("loadbig", embedder, qa_model, row["p95_ms"], row["meets_sla"], flush=True)
+        time.sleep(10)
+
+
 def build_gold_cache():
     lines = (RESULTS / TEST_POOL).read_text(encoding="utf-8").splitlines()
     with (RESULTS / GOLD_CACHE).open("w", encoding="utf-8") as f:
@@ -166,4 +195,4 @@ def gold_part():
         time.sleep(10)
 
 
-{"accuracy": accuracy_part, "load": load_part, "gold": gold_part}[args.part]()
+{"accuracy": accuracy_part, "load": load_part, "loadbig": load_big_part, "gold": gold_part}[args.part]()

@@ -1,0 +1,31 @@
+| Embedder | QA model | Embed replicas x cores | QA replicas x cores | Cost | Core seconds | F1 | EM | p50 ms | p95 ms | p99 ms | SLO attainment | Meets SLA |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all-MiniLM-L6-v2 | tinyroberta-squad2 | 4x2 | 2x2 | 12 | 1440 | 0.410 | 0.334 | 1865 | 3399 | 3738 | 100.0% | yes |
+| all-MiniLM-L6-v2 | roberta-base-squad2 | 4x2 | 4x2 | 16 | 1920 | 0.469 | 0.398 | 1887 | 5790 | 6624 | 100.0% | yes |
+| all-MiniLM-L6-v2 | distilbert-base-cased-distilled-squad | 4x2 | 2x2 | 12 | 1440 | 0.388 | 0.310 | 1252 | 3673 | 3984 | 100.0% | yes |
+| all-MiniLM-L6-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 4x2 | 4x2 | 16 | 1920 | 0.566 | 0.489 | 30000 | 30000 | 30000 | 0.0% | no |
+| all-MiniLM-L12-v2 | tinyroberta-squad2 | 4x2 | 2x2 | 12 | 1440 | 0.424 | 0.340 | 18226 | 28312 | 28975 | 14.1% | no |
+| all-MiniLM-L12-v2 | roberta-base-squad2 | 4x2 | 4x2 | 16 | 1920 | 0.469 | 0.395 | 18707 | 30000 | 30000 | 14.6% | no |
+| all-MiniLM-L12-v2 | distilbert-base-cased-distilled-squad | 4x2 | 2x2 | 12 | 1440 | 0.413 | 0.332 | 15113 | 24688 | 26036 | 19.2% | no |
+| all-MiniLM-L12-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 4x2 | 4x2 | 16 | 1920 | 0.556 | 0.478 | 30000 | 30000 | 31487 | 0.0% | no |
+| all-mpnet-base-v2 | tinyroberta-squad2 | 4x2 | 2x2 | 12 | 1440 | 0.439 | 0.363 | 30000 | 30000 | 30000 | 0.0% | no |
+| all-mpnet-base-v2 | roberta-base-squad2 | 4x2 | 4x2 | 16 | 1920 | 0.496 | 0.422 | 30000 | 30000 | 30000 | 0.0% | no |
+| all-mpnet-base-v2 | distilbert-base-cased-distilled-squad | 4x2 | 2x2 | 12 | 1440 | 0.430 | 0.353 | 30000 | 30000 | 30000 | 0.0% | no |
+| all-mpnet-base-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 4x2 | 4x2 | 16 | 1920 | 0.576 | 0.502 | 30000 | 30000 | 30000 | 0.0% | no |
+| bge-small-en-v1.5 | tinyroberta-squad2 | 4x2 | 2x2 | 12 | 1440 | 0.507 | 0.430 | 18307 | 28652 | 30000 | 13.7% | no |
+| bge-small-en-v1.5 | roberta-base-squad2 | 4x2 | 4x2 | 16 | 1920 | 0.558 | 0.475 | 19441 | 30000 | 30360 | 14.0% | no |
+| bge-small-en-v1.5 | distilbert-base-cased-distilled-squad | 4x2 | 2x2 | 12 | 1440 | 0.472 | 0.396 | 15477 | 25479 | 27119 | 17.7% | no |
+| bge-small-en-v1.5 | bert-large-uncased-whole-word-masking-finetuned-squad | 4x2 | 4x2 | 16 | 1920 | 0.639 | 0.559 | 30000 | 30000 | 32505 | 0.0% | no |
+| all-MiniLM-L6-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 6x3 | 6x3 | 36 | 4320 | 0.566 | 0.489 | 30000 | 30000 | 30000 | 0.5% | no |
+| all-MiniLM-L12-v2 | tinyroberta-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.424 | 0.340 | 1001 | 2091 | 2770 | 100.0% | yes |
+| all-MiniLM-L12-v2 | roberta-base-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.469 | 0.395 | 3062 | 5793 | 6223 | 100.0% | yes |
+| all-MiniLM-L12-v2 | distilbert-base-cased-distilled-squad | 6x3 | 6x3 | 36 | 4320 | 0.413 | 0.332 | 909 | 1693 | 2100 | 100.0% | yes |
+| all-MiniLM-L12-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 6x3 | 6x3 | 36 | 4320 | 0.556 | 0.478 | 30000 | 30000 | 31755 | 0.1% | no |
+| all-mpnet-base-v2 | tinyroberta-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.439 | 0.363 | 30000 | 30000 | 30000 | 0.6% | no |
+| all-mpnet-base-v2 | roberta-base-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.496 | 0.422 | 30000 | 30000 | 30000 | 0.6% | no |
+| all-mpnet-base-v2 | distilbert-base-cased-distilled-squad | 6x3 | 6x3 | 36 | 4320 | 0.430 | 0.353 | 30000 | 30000 | 30000 | 1.4% | no |
+| all-mpnet-base-v2 | bert-large-uncased-whole-word-masking-finetuned-squad | 6x3 | 6x3 | 36 | 4320 | 0.576 | 0.502 | 30000 | 30000 | 30330 | 0.0% | no |
+| bge-small-en-v1.5 | tinyroberta-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.507 | 0.430 | 961 | 1723 | 2161 | 100.0% | yes |
+| bge-small-en-v1.5 | roberta-base-squad2 | 6x3 | 6x3 | 36 | 4320 | 0.558 | 0.475 | 3149 | 6059 | 6832 | 100.0% | yes |
+| bge-small-en-v1.5 | distilbert-base-cased-distilled-squad | 6x3 | 6x3 | 36 | 4320 | 0.472 | 0.396 | 920 | 1687 | 2204 | 100.0% | yes |
+| bge-small-en-v1.5 | bert-large-uncased-whole-word-masking-finetuned-squad | 6x3 | 6x3 | 36 | 4320 | 0.639 | 0.559 | 30000 | 30000 | 31471 | 0.0% | no |

@@ -1,0 +1,4 @@
+{"qa_model": "tinyroberta-squad2", "questions": 1000, "f1": 0.6524211397988863, "em": 0.568, "answered": 1000}
+{"qa_model": "roberta-base-squad2", "questions": 1000, "f1": 0.7227526281948428, "em": 0.635, "answered": 1000}
+{"qa_model": "distilbert-base-cased-distilled-squad", "questions": 1000, "f1": 0.6139183314258146, "em": 0.526, "answered": 1000}
+{"qa_model": "bert-large-uncased-whole-word-masking-finetuned-squad", "questions": 1000, "f1": 0.7824474618959302, "em": 0.69, "answered": 1000}

@@ -19,7 +19,7 @@ report() {
     if python3 -c "import numpy, matplotlib" 2>/dev/null; then
         python3 loadgen/report.py "$results"
     else
-        docker run --rm --user "$(id -u):$(id -g)" --entrypoint python \
+        docker run --rm --user "$(id -u):$(id -g)" --entrypoint python3 \
             -v "$PWD":/work -w /work qa-pipeline loadgen/report.py "$results"
     fi
 }
