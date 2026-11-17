@@ -21,7 +21,7 @@ TEST_POOL = "testslice.jsonl"
 GOLD_CACHE = "gold_cache.jsonl"
 E2E_OUT = RESULTS / "e2e.jsonl"
 GOLD_OUT = RESULTS / "gold.jsonl"
-BIG = (6, 4)
+BIG = (6, 3)
 
 p = argparse.ArgumentParser()
 p.add_argument("part", choices=["accuracy", "load", "gold"])
