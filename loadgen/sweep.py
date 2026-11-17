@@ -2,8 +2,9 @@ import json
 import math
 import time
 
-from harness import RESULTS, configure, probe
+from harness import CACHE, RESULTS, build_cache, configure, probe
 
+CACHED = False
 OUT = RESULTS / "profiling.jsonl"
 SLA = RESULTS / "sla.json"
 
@@ -66,7 +67,8 @@ def find_max(tag, guess):
 
     def run(rate):
         duration = max(25, math.ceil(80 / rate))
-        result = probe(f"{tag}_{rate:.2f}", rate, duration, 0, k, search, slo)
+        result = probe(f"{tag}_{rate:.2f}", rate, duration, 0, k, search, slo,
+                       cached=CACHED)
         probes.append({"rate": rate, "p95_ms": result["p95_ms"],
                        "failed": result["failed"], "sent": result["sent"]})
         time.sleep(10)
@@ -115,6 +117,14 @@ for stage, spec in STAGES.items():
     other = spec["other"]
     configure(other, OTHER_REPLICAS, OTHER_CORES,
               **stage_env(other, reference_variant(other), ref["batch"]))
+    CACHED = stage == "qa"
+    if CACHED and not CACHE.exists():
+        try:
+            build_cache(k, search)
+        except Exception as error:
+            print("cache failed, QA stage uses the live embedding stage", repr(error),
+                  flush=True)
+            CACHED = False
     for replicas, cores in RESOURCES:
         cost = replicas * cores
         for variant in spec["variants"]:
@@ -145,6 +155,7 @@ for stage, spec in STAGES.items():
                     "stage": stage, "variant": variant, "batch": batch,
                     "replicas": replicas, "cores": cores, "cost": cost,
                     "slo_ms": slo, "k": k, "search": search,
+                    "upstream": "cached" if CACHED else "live",
                     "max_rps_meeting_slo": max_rps, "at_max": best, "probes": probes,
                 }
                 with OUT.open("a") as f:

@@ -8,6 +8,7 @@ from collections import Counter
 
 import grpc
 import numpy as np
+from google.protobuf import json_format
 
 import qa_pb2
 import qa_pb2_grpc
@@ -37,10 +38,23 @@ def channel(target):
     )
 
 
-def load_pool(path, offset, count):
+def load_pool(path, offset, count, limit=None):
     with open(path, encoding="utf-8") as f:
         lines = f.read().splitlines()
+    if limit:
+        lines = lines[:limit]
     return [json.loads(lines[(offset + i) % len(lines)]) for i in range(count)]
+
+
+def load_cache(path):
+    cache = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            entry = json.loads(line)
+            cache[entry["id"]] = [
+                json_format.ParseDict(c, qa_pb2.Chunk()) for c in entry["chunks"]
+            ]
+    return cache
 
 
 def summarize(args, arrivals, records):
@@ -89,21 +103,25 @@ async def run(args):
     gaps = rng.exponential(1 / args.rate, size=int(args.rate * args.duration * 3) + 100)
     arrivals = np.cumsum(gaps)
     arrivals = arrivals[arrivals < args.duration]
-    items = load_pool(args.pool, args.offset, len(arrivals))
-    requests = [
-        qa_pb2.RetrieveRequest(
-            question=item["question"],
-            paragraphs=[
-                qa_pb2.Paragraph(title=p["title"], para_id=n, text=p["text"])
-                for n, p in enumerate(item["paragraphs"])
-            ],
-            k=args.k,
-            search=args.search,
-        )
-        for item in items
-    ]
-
-    embed = qa_pb2_grpc.EmbeddingStub(channel(args.embed))
+    cache = load_cache(args.cache) if args.cache else None
+    items = load_pool(args.pool, args.offset, len(arrivals),
+                      limit=len(cache) if cache else None)
+    requests = None
+    embed = None
+    if cache is None:
+        requests = [
+            qa_pb2.RetrieveRequest(
+                question=item["question"],
+                paragraphs=[
+                    qa_pb2.Paragraph(title=p["title"], para_id=n, text=p["text"])
+                    for n, p in enumerate(item["paragraphs"])
+                ],
+                k=args.k,
+                search=args.search,
+            )
+            for item in items
+        ]
+        embed = qa_pb2_grpc.EmbeddingStub(channel(args.embed))
     qa = qa_pb2_grpc.QAStub(channel(args.qa))
     records = {}
 
@@ -111,12 +129,16 @@ async def run(args):
         record = {"index": index, "due": float(due), "question_id": items[index]["id"]}
         try:
             began = time.perf_counter()
-            found = await embed.Retrieve(requests[index], timeout=args.timeout)
+            if cache is None:
+                found = await embed.Retrieve(requests[index], timeout=args.timeout)
+                chunks, embed_queue, embed_service = found.chunks, found.queue_s, found.service_s
+            else:
+                chunks, embed_queue, embed_service = cache[items[index]["id"]], 0.0, 0.0
             middle = time.perf_counter()
             answer = await qa.Answer(
                 qa_pb2.AnswerRequest(
                     question=items[index]["question"],
-                    chunks=found.chunks,
+                    chunks=chunks,
                     allow_empty=args.allow_empty,
                 ),
                 timeout=args.timeout,
@@ -133,8 +155,8 @@ async def run(args):
                 lag_ms=(began - intended) * 1000,
                 embed_rtt_ms=(middle - began) * 1000,
                 qa_rtt_ms=(end - middle) * 1000,
-                embed_queue_ms=found.queue_s * 1000,
-                embed_service_ms=found.service_s * 1000,
+                embed_queue_ms=embed_queue * 1000,
+                embed_service_ms=embed_service * 1000,
                 qa_queue_ms=answer.queue_s * 1000,
                 qa_service_ms=answer.service_s * 1000,
                 em=em,
@@ -168,7 +190,8 @@ async def run(args):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--embed", required=True)
+    p.add_argument("--embed", default=None)
+    p.add_argument("--cache", default=None)
     p.add_argument("--qa", required=True)
     p.add_argument("--pool", required=True)
     p.add_argument("--rate", type=float, required=True)
@@ -182,7 +205,10 @@ def main():
     p.add_argument("--slo-ms", type=float, default=None)
     p.add_argument("--allow-empty", action="store_true")
     p.add_argument("--out", required=True)
-    asyncio.run(run(p.parse_args()))
+    args = p.parse_args()
+    if not args.embed and not args.cache:
+        p.error("give --embed or --cache")
+    asyncio.run(run(args))
 
 
 main()

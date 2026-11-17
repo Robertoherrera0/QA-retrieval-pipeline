@@ -1,5 +1,5 @@
 FROM python:3.11-slim
 WORKDIR /app
 RUN pip install --no-cache-dir grpcio grpcio-tools numpy
-COPY services/qa.proto loadgen/loadgen.py ./
+COPY services/qa.proto loadgen/loadgen.py loadgen/build_cache.py ./
 RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. qa.proto

@@ -31,13 +31,30 @@ def configure(stage, replicas, cores, **env):
     )
 
 
-def probe(tag, rate, duration, offset, k, search, slo_ms=None, warmup=5):
+CACHE = RESULTS / "chunks_cache.jsonl"
+
+
+def build_cache(k, search, count=2000):
+    subprocess.run(
+        [
+            "docker", "run", "--rm", "--network", "host", "-v", f"{RESULTS}:/data",
+            "qa-loadgen", "python", "build_cache.py",
+            "--embed", target("embed"), "--pool", "/data/loadpool.jsonl",
+            "--count", str(count), "--k", str(k), "--search", search,
+            "--out", f"/data/{CACHE.name}",
+        ],
+        check=True,
+    )
+
+
+def probe(tag, rate, duration, offset, k, search, slo_ms=None, warmup=5, cached=False):
     out_dir = RESULTS / "loadruns"
     out_dir.mkdir(parents=True, exist_ok=True)
+    upstream = ["--cache", f"/data/{CACHE.name}"] if cached else ["--embed", target("embed")]
     command = [
         "docker", "run", "--rm", "--network", "host", "-v", f"{RESULTS}:/data",
         "qa-loadgen", "python", "loadgen.py",
-        "--embed", target("embed"), "--qa", target("qa"),
+        *upstream, "--qa", target("qa"),
         "--pool", "/data/loadpool.jsonl", "--rate", str(rate),
         "--duration", str(duration), "--warmup", str(warmup),
         "--offset", str(offset), "--k", str(k), "--search", search,
