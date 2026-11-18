@@ -223,7 +223,7 @@ def t7():
     for c in scored:
         ax.scatter(c["cost"], c["f1"], s=70, marker="o" if c["meets_sla"] else "x",
                    color="C2" if c["meets_sla"] else "C3")
-    front = pareto_front(scored)
+    front = pareto_front([c for c in scored if c["meets_sla"]])
     ax.step([c["cost"] for c in front], [c["f1"] for c in front], where="post",
             color="black", linewidth=1.2)
     for c in front:
